@@ -1,0 +1,33 @@
+ Base URL: <%= $conn.base_url %>
+  Version: <%= $conn.version %>
+ Username: <%= $conn.username %>
+Workspace: <%= $conn.workspace.name %>
+  > id: <%= $conn.workspace.object_id %>
+  > state: <%= $conn.workspace.state %>
+  > iteration unit: <%= $conn.workspace.iteration_estimate_unit_name %>, release unit: <%= $conn.workspace.release_estimate_unit_name %>, task unit: <%= $conn.workspace.task_unit_name %>
+  > schedule states: <%= $conn.workspace.schedule_states.join('|') %>
+  > prefixes: <%= $conn.workspace.prefix_userstory %>|<%= $conn.workspace.prefix_task %>|<%= $conn.workspace.prefix_defect %>|<%= $conn.workspace.prefix_testcase %>|<%= $conn.workspace.prefix_defectsuite %>
+  > timezone: <%= $conn.workspace.time_zone %>
+  > date format: <%= $conn.workspace.date_format %>
+  > date/time format: <%= $conn.workspace.date_time_format %>
+  > workdays: <%= $conn.workspace.work_days.join(', ').downcase %>
+<% if $conn.has_project? %>
+  Project: <%= $conn.project.name %>
+<% end %>
+<% if $conn.has_iteration? %>
+  Iteration: <%= $conn.iteration.name %>
+  > start: <%= Date.parse($conn.iteration.start_date).strftime('%Y-%m-%d') %>
+  > end: <%= Date.parse($conn.iteration.end_date).strftime('%Y-%m-%d') %>
+<% end %>
+
+
+<% if $conn.debug %>
+----[ DEBUGGING ]----
+
+[Windows]
+<% managed_display_window.window_buffers.each_pair { |window_name, window_attrs| %>
+  > <%= window_name %> <% window_attrs.each_pair { |k, v| %>
+      <%= k %> => <%= v.inspect %><% } %>
+<% } %>
+
+<% end %>

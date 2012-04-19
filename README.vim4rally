@@ -1,0 +1,10 @@
+Rally ALM Integration for Vim - README
+--------------------------------------
+
+See INSTALL.rally4vim for installation.
+See CHANGES.rally4vim for release notes.
+
+Once installed, type ':help rally' within vim for description,
+tutorial, key mappings, troubleshooting, history, etc.
+
+Enjoy!

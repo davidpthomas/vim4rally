@@ -1,0 +1,77 @@
+  Rally ALM Integration for Vim - Installation
+  --------------------------------------------
+
+  Installing the Rally plugin for Vim is easy.
+
+  0. Requirements - Verify requirements listed at the end of this file.
+
+  1. Download - Get the plugin.
+
+                  * vim.org --> scripts     [stable releases]
+                  * dthomas@rallydev.com,   [development builds]
+                    davidpthomas@gmail.com
+
+  2. Install - unpack archive _directly_ in your vim runtime path.
+
+                     Unix: $HOME/.vim
+                  Windows: %HOMEPATH%\vimfiles
+
+               e.g.   $ cd ~/.vim
+                      $ tar -xvzf vim4rally_1.0.tgz   (or unzip)
+
+               Verify that plugin/rally/rally.vim and doc/rally.txt exist.
+               Other files are needed but those 2 are enough to simply verify.
+
+  3. Setup - Add your login credentials and connect info to the Rally properties file.
+
+                  plugin/rally/rally.properties
+
+           - Set the permissions on properties file to 600 or 'rw-------'
+             NOTE: Vim will warn if permissions are not set.
+
+  4. Documentation - Install help documentation by launching Vim and executing:
+
+                     Unix: :helptags ~/.vim/doc
+                  Windows: :helptags ~\vimfiles\doc
+
+               Verify the setup by typing ':help rally' within Vim.
+
+  5. Verify  - Open a file.  Type '\h' to see quickhelp commands.
+
+               When the plugin is loaded, a connection to
+               Rally is attempted.  You will see an info notice on the
+               success or failure of that connection.  Keep in mind that
+               the plugin does a lazy 'full' connection to rally
+               (on first real command) since the first interation takes a
+               few seconds to cache subscription/workspace details.
+
+  With the plugin installed, see the |rally-tutorial| to get started.
+  Check |rally-troubleshooting| if you encounter any installation problems.
+
+  Happy Vimming!
+
+
+===============================================================================
+Requirements
+===============================================================================
+
+  * Vim 7.2p374 or greater: $ vim --version | head -1
+    - note: the 374 patch provides support for ruby eval() to understand Vim types
+    - note: patches can be found here: http://ftp.vim.org/pub/vim/patches/7.2
+  * Vim/Ruby Module: $vim --version | grep ruby  --> look for "+ruby"
+  * Ruby 1.8.6+: $ ruby --version
+    - note: this plugin was also developed on 1.9.2-p180 but no later.
+  * Rally Account: login to http://rally1.rallydev.com
+  * Rally Workspace: login & confirm access/name of workspace (upper left corner)
+
+  * Required Ruby Gems
+    - rally_rest_api (1.0.3+)
+    - tzinfo (0.3.29)   # may work with earlier versions
+    - builder (3.0.0)   # may work with earlier versions
+
+    If you don't see those gems with '$ gem list --local', you can
+    install them with the following example syntax:
+
+    e.g. $ gem install rally_rest_api --version '= 1.0.3'
+
+

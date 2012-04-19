@@ -1,0 +1,26 @@
+Rally ALM Integration for Vim - Release Notes
+---------------------------------------------
+
+See ':help rally-history' for a detailed log
+See ':help rally-backlog' for possible upcoming features/fixes
+
+
+Jan 06, 2012 - 1.0
+               * search for stories, tasks, defects
+               * view story hierarchies with statuses and blocks
+               * edit task todo, estimate, and block
+               * view burndown and cumulative flow charts
+               * secure login credentials setup
+               * switch workspaces
+               * inline quickhelp and full documentation
+               * show session/connection/workspace info
+
+               ! Requires Vim 7.0+, Ruby 1.8.6+, compiled +ruby option, Rally acct
+
+Pre 1.0 Milestones
+
+Jan 06, 2012 - polished plugin; created & sent video walkthrough; built release tarball script
+Jan 05, 2012 - created cumulative flow diagram
+Dec 28, 2011 - realized charting was possible - built burndown chart
+Jul 30, 2011 - breakthrough in using +ruby interface, data display, window mgmt
+Feb 07, 2011 - project inception

@@ -1,0 +1,63 @@
+<%# Single Defect Template %>
+<%# Available Variables [conn: direct access], [defect: single defect object] %>
+<%  extend ArtifactHelper    # common methods for displaying artifact data (dates, states, etc) %>
+<%
+  p = ProgressBar.new("Loading Defect...", 5)
+  p.increment
+%><%  if defect.blocked? %>
+  <%= formatted_blocked(defect.blocked) %>   ID | <%= defect.formatted_i_d %>
+<%  else %>
+            ID | <%= defect.formatted_i_d %>
+<%  end %>
+          Name | <%= StringUtils.html2text(defect.name) %>
+          Tags | <%= defect.tags %>
+         Owner | <%= defect.owner %>
+       Project | <%= defect.project %>
+<%  desc_split = StringUtils.html2text(defect.description).split("\n").collect {|x| x.gsub(/\n/, '')} %>
+   Description | <%= desc_split[0] %>
+<%  if desc_split.length > 1 %>
+<%  desc_split.each_index do |index| %>
+<%    next if index == 0 %>
+               | <%= desc_split[index] %>
+<%  end %>
+<%  end %>
+
+         State | <%= defect.state.ljust(25, ' ') %>           Environment | <%= defect.environment.ljust(15, ' ') %>
+      Priority | <%= defect.priority.ljust(25, ' ') %>              Severity | <%= defect.severity.ljust(15, ' ') %>
+  Submitted By | <%= defect.submitted_by.name.ljust(25, ' ') %>         Creation Date | <%= defect.creation_date.ljust(15, ' ') %>
+      Found In | <%= defect.found_in_build.ljust(25, ' ') %>              Fixed In | <%= defect.fixed_in_build.ljust(15, ' ') %>
+  Target Build | <%= defect.target_build.ljust(25, ' ') %>           Verified In | <%= defect.verified_in_build.ljust(15, ' ') %>
+    Resolution | <%= defect.resolution.ljust(25, ' ') %>           Target Date | <%= defect.target_date.ljust(15, ' ') %>
+  Release Note | <%= defect.release_note.ljust(25, ' ') %>           Affects Doc | <%= defect.affects_doc.ljust(15, ' ') %>
+<% if !defect.requirement.empty? %>
+    User Story | <%= defect.requirement.formatted_i_d %>: <%= defect.requirement.name.ljust(25, ' ') %>
+<% end %>
+
+Schedule State | <%= defect.schedule_state.ljust(25, ' ') %>           Plan Estimate | <%= defect.plan_estimate.rjust(5, ' ') %> <%= conn.workspace.defect_unit_name %>
+     Iteration | <%= formatted_iteration(defect.iteration).ljust(25, ' ') %>           Task Estimate | <%= defect.task_estimate_total.rjust(5, ' ') %> <%= conn.workspace.defect_unit_name %>
+       Release | <%= formatted_release(defect.release).ljust(25, ' ') %>               Task Todo | <%= defect.task_remaining_total.rjust(5, ' ') %> <%= conn.workspace.defect_unit_name %>
+<%  if !defect.tasks.empty? %>
+
+<%  p.increment %>
+[ Tasks ]                                                                            {{{
+ID     Name                                           Est      ToDo   State   Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
+<%= formatted_tasks(defect.tasks) %>
+____________________________________________________________________________________ }}}
+<% end %>
+<%  if !defect.discussion.empty? %>
+
+<%  p.increment %>
+[ Discussions ]                                                                      {{{
+<%= formatted_discussions(defect.discussion) %>
+____________________________________________________________________________________ }}}
+<% end %>
+
+<%  p.increment %>
+<%  if !defect.notes.empty? %>
+[ Notes ]                                                                            {{{
+<%= formatted_notes(defect.notes) %>
+
+____________________________________________________________________________________ }}}
+<% end %>
+<%  p.increment %>
+<% p.close %>

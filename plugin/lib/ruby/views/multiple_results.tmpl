@@ -1,0 +1,74 @@
+<%# Template: Multiple Results View
+  # Description: This template file displays artifacts (User Stories, Defects, etc) returned from
+  # performing general, workspace-wide search.
+  #
+  # IMPORTANT: Line break display in VIM is very finicky so change this file carefully and test often.
+%><% extend ArtifactHelper    # common methods for displaying artifact data (dates, states, etc) %>
+<%
+# Print first char of schedule state e.g. [P]
+def print_schedule_state(schedule_state)
+  first_char = schedule_state[0,1].upcase
+  first_char = "P" if schedule_state == "In-Progress"
+  "[#{first_char}]"
+end
+
+# Print first char of task state e.g. [C]
+def print_state(state)
+  first_char = state[0,1].upcase
+  first_char = "P" if state == "In-Progress"
+  "[#{first_char}]"
+end
+
+# Print owner name
+def print_owner(owner)
+  owner = "Unassigned" if owner.nil?
+  "(#{owner})"
+end 
+
+p = ProgressBar.new("Searching...", 6)
+p.increment
+%><% if !results_by_type[$conn.workspace.prefix_userstory].empty? %>[Stories]
+<% results_by_type[$conn.workspace.prefix_userstory].each do |story| %>
+<% blocked_msg = (story.blocked == "true") ? "** #{formatted_blocked(true)} **" : "" %>
+{{{ <%= story.formatted_i_d %> "<%= story.name %>" <%= print_schedule_state(story.schedule_state) %> <%= print_owner(story.owner) %> [<%= story.project %>] <%= blocked_msg %> 
+    Description: <%= story.description %>
+}}}
+<% end %><% end %>
+<% p.increment %>
+<%# ----[ TASKS ]---- %>
+<% if !results_by_type[$conn.workspace.prefix_task].empty? %>
+[Tasks]
+<% results_by_type[$conn.workspace.prefix_task].each do |task| %>
+{{{ <%= task.formatted_i_d %> "<%= task.name %>" <%= print_state(task.state) %> <%= print_owner(task.owner) %> [<%= task.project %>]
+    Description: <%= task.description %>
+}}}
+<% end %><% end %>
+<% p.increment %>
+<%# ----[ DEFECTS ]---- %>
+<% if !results_by_type[$conn.workspace.prefix_defect].empty? %>
+[Defects]
+<% results_by_type[$conn.workspace.prefix_defect].each do |defect| %>
+{{{ <%= defect.formatted_i_d %> "<%= defect.name %>" <%= print_schedule_state(defect.schedule_state) %> <%= print_owner(defect.owner) %> [<%= defect.project %>]
+    Description: <%= defect.description %>
+}}}
+<% end %><% end %>
+<% p.increment %>
+<%# ----[ DEFECT SUITES ]---- %>
+<% if !results_by_type[$conn.workspace.prefix_defectsuite].empty? %>
+[DefectSuites]
+<% results_by_type[$conn.workspace.prefix_defectsuite].each do |defectsuite| %>
+{{{<%= defectsuite.formatted_i_d %> "<%= defectsuite.name %>" <%= print_schedule_state(defectsuite.schedule_state) %> <%= print_owner(defectsuite.owner) %> [<%= defectsuite.project %>]
+    Description: <%= defectsuite.description %>
+}}}
+<% end %><% end %>
+<% p.increment %>
+<%# ----[ TEST CASES ]---- %>
+<% if !results_by_type[$conn.workspace.prefix_testcase].empty? %>
+[TestCases]
+<% results_by_type[$conn.workspace.prefix_testcase].each do |testcase| %>
+{{{<%= testcase.formatted_i_d %> "<%= testcase.name %>" <%= print_owner(testcase.owner) %> [<%= testcase.project %>]
+    Description: <%= testcase.description %>
+}}}
+<% end %><% end %>
+<% p.increment %>
+<% p.close %>

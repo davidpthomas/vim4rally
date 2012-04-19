@@ -1,0 +1,469 @@
+*rally.txt*         Rally ALM Integration for Vim      Last change: 2012.01.07
+
+                                                              *rally-overview*
+                                                                *rally-plugin*
+                                                                       *rally*
+                       Rally ALM Integration for Vim
+                            v1.0 - 2012.01.07
+
+  Rally is an award winning Agile Lifecycle Management (ALM) tool that helps
+  organizations predictably deliver valuable, quality software.  Deliver the
+  features users love.  Faster.
+
+  As a vim user, you know what productivity _really_ means.  This plugin
+  lets you collaborate with your agile team using Rally and keep your
+  fingers on the keyboard.
+
+  This plugin continues to be developed out of necessity and is used by
+  the author.  Read some of the interesting |rally-history|.
+
+  See the |rally-maintainer| for contact information.
+
+  /happy coding/
+
+===============================================================================
+Contents
+                                                             *rally-contents*
+
+  |rally-requirements|      Plugin requirements
+  |rally-installation|      Plugin installation
+  |rally-configuration|     Plugin configuration options
+  |rally-tutorial|          Getting started tutorial
+  |rally-commands|          Available plugin commands
+  |rally-troubleshooting|   Troubleshoot problems with the plugin
+  |rally-history|           Oh the blood, sweat, and tears
+  |rally-backlog|           The infinite todo list
+  |rally-author|            Who on earth wrote this plugin!
+
+===============================================================================
+Requirements
+                                                           *rally-requirements*
+
+  * Vim 7.2p374 or greater: $ vim --version | head -1
+    - note: the 374 patch provides support for ruby eval() to understand Vim types
+    - note: patches can be found here: http://ftp.vim.org/pub/vim/patches/7.2
+  * Vim/Ruby Module: $vim --version | grep ruby  --> look for "+ruby"
+  * Ruby 1.8.6+: $ ruby --version
+    - note: this plugin was also developed on 1.9.2-p180 but no later.
+  * Rally Account: login to http://rally1.rallydev.com
+  * Rally Workspace: login & confirm access/name of workspace (upper left corner)
+
+  * Ruby Gems
+    - rally_rest_api (1.0.3+)
+    - tzinfo (0.3.29)   # may work with earlier versions
+    - builder (3.0.0)   # may work with earlier versions
+
+    If you don't see those gems with '$ gem list --local', you can
+    install them with the following example syntax:
+
+    e.g. $ gem install rally_rest_api --version '= 1.0.3'
+
+   * [Optional] +clipboard support compiled in to search on
+     visually selected items.
+
+===============================================================================
+Installation
+                                                           *rally-installation*
+
+  Installing the Rally plugin for Vim is easy.
+
+  NOTE: Be sure you already have a Rally account for any edition.
+ 
+  0. Requirements - Verify requirements listed at the end of this file.
+
+  1. Download - get the plugin.
+
+                  * vim.org --> scripts     [stable releases]
+                  * dthomas@rallydev.com,   [development builds]
+                    davidpthomas@gmail.com
+
+  2. Install - unpack archive _directly_ in your vim runtime path.
+
+                     Unix: $HOME/.vim
+                  Windows: %HOMEPATH%\vimfiles
+
+               e.g.   $ cd ~/.vim
+                      $ tar -xvzf vim4rally_1.0.tgz   (or unzip)
+
+               Verify that plugin/rally/rally.vim and doc/rally.txt exist.
+               Other files are needed but those 2 are enough to simply verify.
+
+  3. Setup - Add your login credentials and connect info to the Rally properties file.
+
+                  plugin/rally/rally.properties
+
+           - Set the permissions on properties file to 600 or 'rw-------'
+             NOTE: Vim will warn if permissions are not set.
+
+  4. Documentation - Install help documentation by launching Vim and executing:
+
+                     Unix: :helptags ~/.vim/doc
+                  Windows: :helptags ~\vimfiles\doc
+
+               Verify the setup by typing ':help rally' within Vim.
+
+  5. Verify  - Open a file.  Type '\h' to see quickhelp commands.
+
+               When the plugin is loaded, a connection to
+               Rally is attempted.  You will see an info notice on the
+               success or failure of that connection.  Keep in mind that
+               the plugin does a lazy 'full' connection to rally
+               (on first real command) since the first interation takes a
+               few seconds to cache subscription/workspace details.
+
+  With the plugin installed, see the |rally-tutorial| to get started.
+  Check |rally-troubleshooting| if you encounter any installation problems.
+
+  Happy Vimming!
+
+===============================================================================
+Configuration
+                                                           *rally-configuration*
+
+  The plugin is configured in 'plugin/rally/rally.properties' file.
+
+                base_url: [Required] URL to your Rally subscription
+                 version: [Required] Version of the Rally API to use
+                username: [Required] Your login name to your Rally subscription
+                password: [Required] Your password to your Rally subscription  # prop file uses secure perms
+               workspace: [Optional] Default workspace; if empty, will be prompted on first Rally action
+                log_file: [Optional] Log file for Rally connection
+                   debug: [Optional] enable display of debugging info
+
+        prefix_userstory: [Required] Prefix for user stories
+             prefix_task: [Required] Prefix for tasks
+           prefix_defect: [Required] Prefix for defects
+      prefix_defectsuite: [Required] Prefix for defect suites
+         prefix_testcase: [Required] Prefix for test cases
+
+
+      EXAMPLE:
+
+        base_url: https://rally1.rallydev.com/slm
+        version: 1.25
+        username: first.last@company.com
+        password: QuxxPassword
+        workspace: OurCompany
+        log_file: /tmp/vim_rally.log
+        prefix_userstory: US
+        prefix_task: TA
+        prefix_defect: DE
+        prefix_defectsuite: DS
+        prefix_testcase: TC
+
+
+===============================================================================
+Getting Started Tutorial
+                                                               *rally-tutorial*
+
+   Open a file and press '\h'.  See the available commands?  Lets try a
+   quick search.
+  
+   [NOTE: If you get an error, see the |rally-troubleshooting| section below].
+
+   Press '\s'.  Don't know the ID for a story or task?  No problem.  The
+   search dialog supports full text searches.  Just enter a word that you
+   know is in one of your stories.
+
+   Get some search results?  'j/k' scroll through the list.  Find one you
+   want to see the details of?  Just press '\s' again anywhere on the line.
+
+   If the story is an epic, down below you'll see a "fold" containing the 
+   children.  Just do 'zo' to open the fold and see the children.  The idea
+   is that with folds, we can show children stories, discussion threads,
+   revision history, etc. in a small amount of space.  Back on track, scroll
+   down and hit '\s' on leaf level story.  That will open.
+
+   On a leaf story, scroll down and look for tasks (if it has some).  Again,
+   another fold, so 'zo' to open it up.  press '\s' on a task.
+
+   In a task, you have some options to edit data.  For example, to change
+   the 'to do' field, press '\tt' (task todo).  To edit the estimate,
+   press '\te' (task estimate).  To toggle the blocked status, press '\tb'.
+
+   Lastly, check out the charts.  To see a burndown chart, press '\cb'
+   (chart burndown) or '\cc' (chart cumulative flow).
+
+   Taking a step back, the '\s' lets you search for stories, tasks, and
+   defects.  Just press that, enter an ID or a search string.  You can
+   review the details and possibly update the tasks.   That's it!
+
+   Take a look at the inline help with '\h'.  Those are all available 
+   commands.
+
+   Enjoy!
+
+===============================================================================
+Commands
+                                                               *rally-commands*
+
+
+  \h - Rally 'quick' help
+
+      This will show an inline list of key commands with brief description.
+
+  \z - Rally Information
+
+      This will show information about the current connection such as
+      workspace, user, etc.  If debugging is enabled in the rally.properties
+      file, this will show even more info such as per-window details.
+
+  \w - Rally Workspace [Switcher]
+
+      Prompts the user to select a new workspace.  This workspace will be
+      loaded (and cached).
+
+  \s - Search
+
+     One of the most powerful aspects of this plugin is context-aware search.
+     No matter where you are, '\s' will react to visual mode selections, current
+     line, scan for Ids, and prompt for criteria if no context is found.
+     Searching may return a single artifact or multiple, mixed results.
+     The algorithm is as follows:
+
+           [visual mode?]                      [normal mode?]
+           grab all selected text              grab current line
+
+                           \                     /
+                            \                   /
+                             \                 /
+
+                                empty results?
+
+                                    |        \
+                                    |        [Yes]
+                                   [No]         \
+                                    |
+                                    |           Prompt User for search string
+                                    |
+
+                           text contain artifact Id?   (US123, DE456, etc)
+
+                             /                \
+                          [Yes]              [No]
+                           /                    \
+
+                 Single Artifact Search       General Text Search
+                 (display details)            (display multiple results)
+
+
+  \tt - Task Todo (update)
+
+      This command will prompt to update the ToDo hours for a task. The plugin
+      will attempt to find the a task in context from the task details page
+      or task ID on current line.  Otherwise, it will prompt for the task ID.
+
+  \te - Task Estimate (update)
+
+      This command will prompt to update the Estimate hours for a task. The plugin
+      will attempt to find the a task in context from the task details page
+      or task ID on current line.  Otherwise, it will prompt for the task ID.
+
+  \tb - Toggle Task Block (update)
+
+      This command will prompt to toggle the BLOCKED state of a task. The plugin
+      will attempt to find the a task in context from the task details page
+      or task ID on current line.  Otherwise, it will prompt for the task ID.
+
+  \cb - Iteration Burndown Chart
+
+      This command will show the burndown chart for the currently selected 
+      iteration.
+
+  \cc - Iteration Cumulative Flow Diagram
+
+      This command will show the cumulative flow diagram for the currently
+      selected iteration.
+
+===============================================================================
+Troubleshooting
+                                                        *rally-troubleshooting*
+
+  +----------------------------------------------------------------------------+
+
+   Symptom: Error loading plugin when starting vim.
+
+            Error message may include:
+                * no such file to load -- rally_rest_api
+                * no such file to load -- builder
+
+   Solution: Install the required gems.
+             e.g. $ gem install rally_rest_api --version '= 1.0.3'
+             e.g. $ gem install builder --version '= 3.0.0'
+
+  +----------------------------------------------------------------------------+
+
+   Symptom: Warning messages about required or not-found property values.
+  Solution: Verify that plugin/rally/rally.properties exists.  Inside
+            the file, verify that all properties have values set.
+
+              base_url: URL to Rally subscription e.g. http://rally1.rallydev.com
+              version: Version of the web service API e.g. 1.25
+              username: Your Rally subscription username
+              password: Your Rally subscription password
+              workspace: Rally workspace to connect to
+  
+  +----------------------------------------------------------------------------+
+
+   Symptom: Warning message about Rally properties file at vim startup.
+  Solution: If your plugin/rally/rally.properties file is visible to other users,
+            the Rally plugin will show a warning message.  Be sure to set the
+            permissions of this file to 600 or 'rw-------'.
+
+            Unix: $ chmod 600 rally.properties
+            Windows: Good luck with security.   FIXME
+
+  +----------------------------------------------------------------------------+
+
+   Symptom: Rally help documentation not loading.
+  Solution: Verify that the rally.txt file is located in the vim /doc
+            directory:
+            
+                     Unix: $HOME/.vim/doc/rally.txt
+                  Windows: %HOMEPATH%\vimfiles\doc\rally.txt
+
+            Install help documentation by launching Vim and executing:
+
+                     Unix: :helptags ~/.vim/doc
+                  Windows: :helptags ~\vimfiles\doc
+
+            Verify that the help docs are available by launching vim then typing
+            ":help rally".
+ 
+===============================================================================
+Plugin Development History
+                                                                *rally-history*
+
+  Most of the plugin development happened while I was traveling; either
+  waiting at an airport, 30,000+ feet above sea level, or in a hotel room.
+  I also spent spare cycles during evenings/weekends at home in Santa Cruz, CA.
+
+   2011 Feb 07 37kft: SJC>DEN: initial project concept
+   2011 Feb 17 35kft: DEN>SJC: User: launch new window to show results
+   2011 Apr 29 41kft; PDX>SJC: spike ruby control of vim
+   2011 May 09 37kft; SJC>DEN: spike ruby control of vim
+   2011 May 13 36kft; DEN>SJC: runtime lib loading
+   2011 Jul 28 36kft; SJC>DEN: login auth
+   2011 Jul 30; Boulder,CO: login auth and password security
+   2011 Jul 31; Boulder,CO: story details page - initial data
+   2011 Aug 01; Boulder,CO: story details page - layout
+   2011 Aug 02; Boulder,CO: story details page - children and attribute type query
+   2011 Aug 03; Boulder,CO: story details page - children display
+   2011 Aug 03 36kft; DEN>SJC: plugin load performance; progress bar
+   2011 Aug 06; Santa Cruz, CA: plugin load performance; progress bar
+   2011 Aug 07; Santa Cruz, CA: plugin load performance & latestrapping; properties as ruby not vim
+   2011 Aug 09; Santa Cruz, CA: story tasks
+   2011 Aug 10; Santa Cruz, CA: story defects
+   2011 Aug 11; Santa Cruz, CA: story discussion threads
+   2011 Aug 20; Santa Cruz, CA: generalized story search
+   2011 Aug 21; Santa Cruz, CA: refactored search and content views
+   2011 Aug 22; Santa Cruz, CA: refactored search and content views
+   2011 Aug 28; Santa Cruz, CA: implemented erb templates for views; using ws timezone for discussions display
+   2011 Sep 03; Santa Cruz, CA: search in visual mode; search algorithm
+   2011 Sep 04; Santa Cruz, CA: displaying multiple search results
+   2011 Sep 16; 34kft; SJC>SAN: spike dashboard views with vim tab framework
+   2011 Sep 17; San Diego, CA: window management for search results
+   2011 Sep 08; Santa Cruz, CA: info window
+   2011 Oct 15; Santa Cruz, CA: debugging details in info window 
+   2011 Oct 16; Santa Cruz, CA: refactored vim/ruby include framework to make ruby code independently testable (removed ruby << load syntax); refactored autoload mechanism to reduce LOC
+   2011 Oct 18; Santa Cruz, CA: reload/refresh of details after task todo updated; framework for reloading
+   2011 Oct 19; Santa Cruz, CA: workspace chooser / reload incl. picker widget; refactored connection workspace caching
+   2011 Oct 22; Santa Cruz, CA: quick help display; simplified key bindings; added usability text tips for \help
+   2011 Nov 03; Santa Cruz, CA: refactor view code to share formatting logic
+   2011 Nov 28; 37kft; SFO>DEN: added console and gui menus
+   2011 Dec 27; Santa Cruz, CA: fixed visual bug in text search
+   2011 Dec 28; Santa Cruz, CA: added date labels on burndown chart horiz axis; finished first pass at burndown chart
+   2012 Jan 02; Santa Cruz, CA: added task est update and task block toggle; refactored quickhelp; refactored use of _refs for code usability
+   2012 Jan 03; Santa Cruz, CA: added case insensitive formatted id search; fixed iteration lookup in statusbar
+   2012 Jan 05; Santa Cruz, CA: added cumulative flow diagram
+   2012 Jan 06; Santa Cruz, CA: added parent id to story display to navigate up
+   2012 Jan 07; Santa Cruz, CA: release 1.0-RC1
+   2012 Feb 09; Santa Cruz, CA: error handling if +clipboard not compiled in for visual searching
+
+
+===============================================================================
+Open Backlog of Work
+                                                                *rally-backlog*
+Backlog
+
+ B=Backlog, P=In Progress, C=Completed, A=Accepted
+ E=Epic, T=Task
+ A User, I want the plugin to auto-load when vim starts to prevent manual startup per session [02/07/2011]
+ A User, I want an inline help guide describing the plugin to read a description and history [02/07/2011]
+ A User, I want the plugin to load in multiple open buffers
+ A User, I want to know if my version of Vim needs upgraded to be compatible with the Plugin
+ A User, I want to know what version of the plugin is currently loaded
+ A Spike: ruby integration in vimscript
+ A User, I want to auto-login by [securely] storing credentials in plugin script
+ A User: I want to load a story by ID to review the details during development
+ A User: I want most of the story details to show in the window
+ A User: progress bar for plugin onload
+ A Plugin: convert properties file from vimscript syntax to ruby yaml
+ A User: I want the plugin to load after vim so I can immediately begin editing the file and not waiting on rally connect/setup
+ A User: async load on startup to prevent delays
+ A User: I want to view tasks on a story
+ A User: Minimize data showed in story to prevent scrolling
+ A User: search for story by id when cursor is over id
+ A User: show discussion threads
+ A User: search by highlighted text
+ A User: text search for multiple items
+ A doc req't /install on rally rest gem
+ A User: single display to prevent opening too many windows
+ A User: show cutline ; change highlighting via vim.wikia.com article
+ A Plugin: display rally and debugging info in a window
+ A Plugin: make ruby code independently testable by ruby-only framework (outside of vim)
+ A User: ability to update task todo hours
+ A User: refresh details display if task todo updated
+ A User: select workspace
+ A Plugin: consider replacing runtime/GOTRUBY with rubyfile {file}
+ A Plugin: rename rally global var to conn ? to prevent rally.rally calls in model
+ X User: allow CTRL-C interruption and cancel of an operation
+ A User: show workspace info in status bar
+ A Plugin, consolidate all g:vim rally vars into hash
+ A User, I want an installation guide
+ A User, show 'quick help' page with keys
+ A User, search and show defect details
+ A User, show story id in tasks to navigate 'upwards'
+ A Plugin: refactor view templates to share formatting code
+ A User, show custom menus in console and gvim with avail options
+ A User, show burndown chart
+ A User, update task estimate
+ A User, toggle task blocked
+ A User, show cumulative flow diagram for current iteration
+
+ <^^^^^^^^^^^^^^[dev cutline]^^^^^^^^^^^>
+ B [bug] Plugin, only resize active charts
+ B User, add/delete tasks
+ B User, show and select iteration on burndown chart
+ B User, show project name in status bar
+ B User, show tooltip during load splashscreens
+ B Plugin Developer, I want to display debugging information as the script loads to visualize progress / errors
+ B User: unload rally plugin back to initial state (e.g. statusline)
+
+ [B]acklog | [P]rogress | [A]ccepted | [X] cancelled
+===============================================================================
+Plugin Author/Maintainer
+                                                               *rally-author*
+                                                           *rally-maintainer*
+
+  David P Thomas, <davidpthomas@gmail.com>
+                  <dthomas@rallydev.com>
+
+     personal blog: www.davidpthomas.name
+
+    * Vim user since 1997 (pico before that ;)
+    * currently a Technical Account Manager at Rally Software (2010-present)
+    * formerly a Senior Systems Engineer at AccuRev (2006-2010)
+    * formerly a Senior Software Engineer at Orbitz.com (2001-2006)
+    * originally a programmer with ClassifiedVentures (1997-2001)
+    * author of vim plugins for accurev and rally
+    * numbers juggler, 5 & 7 balls
+    * snowboarder with instructor certification (CASI / Whistler)
+    * Unix over Windows; Vi over Emacs; Ruby over Java; 95wpm.
+    * father of two young sons who enjoy pointing at green screen terms
+    * living, running, and mountain biking in Santa Cruz, CA
+
+  Feel free to contact me with feedback/questions/comments!
+
+                                  -- dave, davidpthomas@gmail.com
+

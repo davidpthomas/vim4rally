@@ -1,0 +1,32 @@
+<%# Single Task Template %>
+<%# Available Variables [conn: direct access], [task: single task object] %>
+<%  extend ArtifactHelper    # common methods for displaying artifact data (dates, states, etc) %>
+<%  if task.blocked? %>
+ <%= formatted_blocked(task.blocked?) %>    ID | <%= task.formatted_i_d %>
+<%  else %>
+            ID | <%= task.formatted_i_d %>
+<%  end %>
+          Name | <%= StringUtils.html2text(task.name) %>
+          Tags | <%= task.tags %>
+         Owner | <%= task.owner %>
+       Project | <%= task.project %>
+<%  desc_split = StringUtils.html2text(task.description).split("\n").collect {|x| x.gsub(/\n/, '')} %>
+   Description | <%= desc_split[0] %>
+<%  if desc_split.length > 1 %>
+<%  desc_split.each_index do |index| %>
+<%    next if index == 0 %>
+               | <%= desc_split[index] %>
+<%  end %>
+<%  end %>
+  Work Product | <%= task.work_product.formatted_i_d %>: <%= task.work_product.name %>
+
+   Story State | <%= task.state.ljust(25, ' ') %>           Task Estimate | <%= task.estimate.rjust(5, ' ') %> <%= conn.workspace.task_unit_name %>
+     Iteration | <%= formatted_iteration(task.iteration).ljust(25, ' ') %>               Task Todo | <%= task.to_do.rjust(5, ' ') %> <%= conn.workspace.task_unit_name %>
+       Release | <%= formatted_release(task.release).ljust(25, ' ') %>
+<%  if !task.notes.empty? %>
+
+[ Notes ]                                                                            {{{
+<%= StringUtils.html2text(task.notes) %>
+
+____________________________________________________________________________________ }}}
+<% end %>

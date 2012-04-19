@@ -1,0 +1,71 @@
+<%# Single Story Template %>
+<%# Available Variables [conn: direct access], [story: single story object] %>
+<% extend ArtifactHelper    # common methods for displaying artifact data (dates, states, etc) %>
+<%
+  p = ProgressBar.new("Loading Story...", 10)
+  p.increment
+%><%  if story.blocked?  %>
+ <%= formatted_blocked(story.blocked) %>    ID | <%= story.formatted_i_d %>
+<%  else %>
+            ID | <%= story.formatted_i_d %>
+<%  end %>
+          Name | <%= StringUtils.html2text(story.name) %>
+          Tags | <%= story.tags %>
+         Owner | <%= story.owner %>
+       Project | <%= story.project %>
+<%  desc_split = StringUtils.html2text(story.description).split("\n").collect {|x| x.gsub(/\n/, '')} %>
+   Description | <%= desc_split[0] %>
+<%  if desc_split.length > 1 %>
+<%  desc_split.each_index do |index| %>
+<%    next if index == 0 %>
+               | <%= desc_split[index] %>
+<%  end %>
+<%  end %>
+<% if !story.parent.empty? %>
+        Parent | <%= story.parent.formatted_i_d %>: <%= story.parent.name %>
+<% end %>
+
+   Story State | <%= story.schedule_state.ljust(25, ' ') %>           Plan Estimate | <%= story.plan_estimate.rjust(5, ' ') %> <%= conn.workspace.iteration_estimate_unit_name %>
+     Iteration | <%= formatted_iteration(story.iteration).ljust(25, ' ') %>     Task Estimate Total | <%= story.task_estimate_total.rjust(5, ' ') %> <%= conn.workspace.task_unit_name %>
+       Release | <%= formatted_release(story.release).ljust(25, ' ') %>    Task Remaining Total | <%= story.task_remaining_total.rjust(5, ' ') %> <%= conn.workspace.task_unit_name %>
+____________________________________________________________________________________
+<%  p.increment %>
+<%  if !story.children.empty? %>
+
+[ Children ]                                                                         {{{
+<%= formatted_children(story.children) %>
+____________________________________________________________________________________ }}}
+<%  end %>
+<%  p.increment %>
+<%  if !story.tasks.empty? %>
+
+[ Tasks ]                                                                            {{{
+ID     Name                                           Est      ToDo   State   Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
+<%= formatted_tasks(story.tasks) %>
+____________________________________________________________________________________ }}}
+<% end %>
+<%  p.increment %>
+<% if !story.defects.empty? %>
+
+[ Defects ]                                                                         {{{
+ID     Name                                        Priority      State      Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
+<%= formatted_defects(story.defects) %>
+____________________________________________________________________________________ }}}
+<% end %>
+<%  p.increment %>
+<%  if !story.discussion.empty? %>
+
+[ Discussions ]                                                                      {{{
+<%= formatted_discussions(story.discussion) %>
+____________________________________________________________________________________ }}}
+<% end %>
+<%  p.increment %>
+<%  if !story.notes.empty? %>
+
+[ Notes ]                                                                            {{{
+<%= formatted_notes(story.notes) %>
+
+____________________________________________________________________________________ }}}
+<% end %>
+<%  p.increment %>
+<% p.close %>

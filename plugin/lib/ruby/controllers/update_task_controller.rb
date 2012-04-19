@@ -58,8 +58,18 @@ class UpdateTaskController < RallyController
       update_msg = "Successfully #{new_value_display} #{task_formatted_id}."
 
     else
-      new_value = VIM::evaluate("input('#{task_display}\nEnter #{@field_label} (#{task_unit_name}): ')")
+      new_value = VIM::evaluate("input('#{task_display}\n[Esc to Cancel] Enter #{@field_label} (#{task_unit_name}): ')")
       update_msg = "Successfully updated #{task_formatted_id}.  [#{@field_label}: #{new_value} #{task_unit_name}]"
+
+      new_value.lstrip!.rstrip!   # remove any pre/post whitespace
+
+      # return if user Escaped or entered no value
+      if new_value.empty?
+        VIM::command("redraw!")
+        VIM::message("No changes made to #{task_formatted_id}.")
+        return
+      end
+
     end
 
     # clear screen

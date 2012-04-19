@@ -40,7 +40,7 @@ ________________________________________________________________________________
 <%  if !story.tasks.empty? %>
 
 [ Tasks ]                                                                            {{{
-ID     Name                                           Est      ToDo   State   Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
+ID     TaskName                                       Est      ToDo   State   Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
 <%= formatted_tasks(story.tasks) %>
 ____________________________________________________________________________________ }}}
 <% end %>
@@ -48,7 +48,7 @@ ________________________________________________________________________________
 <% if !story.defects.empty? %>
 
 [ Defects ]                                                                         {{{
-ID     Name                                        Priority      State      Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
+ID     DefectName                                  Priority      State      Owner  <%# NEED 2 SPACES AFTER OWNER FOR SYNTAX HIGHLIGTING %>
 <%= formatted_defects(story.defects) %>
 ____________________________________________________________________________________ }}}
 <% end %>

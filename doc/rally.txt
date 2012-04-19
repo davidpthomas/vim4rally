@@ -439,7 +439,7 @@ Backlog
  B User, show tooltip during load splashscreens
  B Plugin Developer, I want to display debugging information as the script loads to visualize progress / errors
  B User: unload rally plugin back to initial state (e.g. statusline)
-
+ B Plugin: separate syntax files; enable/disable depending on content shown; prevent match conflict (e.g. Name, Est)
  [B]acklog | [P]rogress | [A]ccepted | [X] cancelled
 ===============================================================================
 Plugin Author/Maintainer

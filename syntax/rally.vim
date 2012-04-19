@@ -17,7 +17,7 @@ endif
 " ********************
 " Story
 " ********************
-syntax match rallyStoryFields /\(ID\|Name\|Tags\|Story State\|Owner\|Project\|Description\|Parent\|Work\ Product\)/
+syntax match rallyStoryFields / \(ID \|Name\|Tags \|Owner \|Project \|Description \|Parent \|Work\ Product \)/
 highlight rallyStoryFields term=bold cterm=bold gui=bold ctermfg=Yellow ctermbg=NONE guifg=Yellow guibg=NONE
 
 syntax match rallyFieldsSeparator /\(|\ \|--\|__|\|___\||__\)/
@@ -26,7 +26,7 @@ highlight rallyFieldsSeparator term=NONE cterm=NONE gui=NONE ctermfg=White cterm
 syntax match rallyStoryBlocked /BLOCKED/
 highlight rallyStoryBlocked term=bold cterm=bold gui=bold ctermfg=White ctermbg=Red guifg=White guibg=Red
 
-syntax match rallyStorySchedule /\(Iteration\|Release\|State\|Schedule\ State\|Plan\ Estimate\|Task\ Estimate\ Total\|Task\ Remaining\ Total\) |/
+syntax match rallyStorySchedule /\(Story State\|Iteration\|Release\|State\|Schedule\ State\|Plan\ Estimate\|Task\ Estimate\ Total\|Task\ Remaining\ Total\) |/
 highlight rallyStorySchedule term=bold cterm=bold gui=bold ctermfg=White ctermbg=NONE guifg=White guibg=None
 
 syntax match rallyStoryUnscheduled /Unscheduled/
@@ -53,7 +53,7 @@ highlight rallyStoryScheduleStateCompleted term=NONE cterm=NONE gui=NONE ctermfg
 syntax match rallyStoryScheduleStateAccepted /\[A\]/
 highlight rallyStoryScheduleStateAccepted term=NONE cterm=NONE gui=NONE ctermfg=Green ctermbg=NONE guifg=Black guibg=NONE
 
-syntax match rallyTaskFields /\(ID    \|Name                                     \|Owner  \|     Est\|   ToDo\|  State \)/
+syntax match rallyTaskFields /\(ID    \|DefectName  \|TaskName  \| Owner  \| Est \| ToDo \| State \)/
 highlight rallyTaskFields term=bold cterm=NONE gui=bold ctermfg=DARKMAGENTA ctermbg=NONE guifg=DARKMAGENTA guibg=NONE
 
 syntax match rallyDefectFields /\( State \| Environment \| Priority \| Severity \| Submitted By \| Creation Date \| Found In \| Fixed In \| Target Build \| Verified In \| Resolution \| Target Date \| Release Note \| Affects Doc \| User Story \)/

@@ -17,7 +17,7 @@
                   Windows: %HOMEPATH%\vimfiles
 
                e.g.   $ cd ~/.vim
-                      $ tar -xvzf vim4rally_1.0.tgz   (or unzip)
+                      $ tar -xvzf vim4rally-1.0.0.tgz   (or unzip)
 
                Verify that plugin/rally/rally.vim and doc/rally.txt exist.
                Other files are needed but those 2 are enough to simply verify.

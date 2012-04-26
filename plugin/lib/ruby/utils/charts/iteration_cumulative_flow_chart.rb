@@ -70,13 +70,15 @@ class IterationCumulativeFlowChart < Chart
       end
 
       if data.total_DPCA_card_estimate > 0 then
-        col_label = "[#{data.total_DPCA_card_estimate}]"
+        formatted_total_DPCA_card_estimate = sprintf("%.1f", data.total_DPCA_card_estimate)
+        col_label = "[#{formatted_total_DPCA_card_estimate}]"
         text(col_left_start + 1 + ((data_col_width - col_label.length)/2.0).floor, axis_bottom_side_offset + defined_end_height, col_label)
       end
 
       # show accepted points at top of accepted area
       if data.total_accepted > 0 then
-        col_label = "[#{data.total_accepted}]"
+        formatted_total_accepted = sprintf("%.1f", data.total_accepted)
+        col_label = "[#{formatted_total_accepted}]"
         text(col_left_start + 1 + ((data_col_width - col_label.length)/2.0).floor, axis_bottom_side_offset + accepted_end_height - 1, col_label)
       end
 

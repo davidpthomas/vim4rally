@@ -1,10 +1,10 @@
-*rally.txt*         Rally ALM Integration for Vim      Last change: 2012.01.07
+*rally.txt*         Rally ALM Integration for Vim      Last change: 2012.04.26
 
                                                               *rally-overview*
                                                                 *rally-plugin*
                                                                        *rally*
                        Rally ALM Integration for Vim
-                            v1.0 - 2012.01.07
+                            v1.0 - 2012.04.26
 
   Rally is an award winning Agile Lifecycle Management (ALM) tool that helps
   organizations predictably deliver valuable, quality software.  Deliver the
@@ -379,6 +379,8 @@ Plugin Development History
    2012 Jan 06; Santa Cruz, CA: added parent id to story display to navigate up
    2012 Jan 07; Santa Cruz, CA: release 1.0-RC1
    2012 Feb 09; Santa Cruz, CA: error handling if +clipboard not compiled in for visual searching
+   2012 Apr 24; Santa Cruz, CA: created github repo
+   2012 Apr 26; Santa Cruz, CA: 1.0 release
 
 
 ===============================================================================
@@ -441,6 +443,7 @@ Backlog
  B User: unload rally plugin back to initial state (e.g. statusline)
  B Plugin: separate syntax files; enable/disable depending on content shown; prevent match conflict (e.g. Name, Est)
  [B]acklog | [P]rogress | [A]ccepted | [X] cancelled
+
 ===============================================================================
 Plugin Author/Maintainer
                                                                *rally-author*
@@ -455,7 +458,6 @@ Plugin Author/Maintainer
     * currently a Technical Account Manager at Rally Software (2010-present)
     * formerly a Senior Systems Engineer at AccuRev (2006-2010)
     * formerly a Senior Software Engineer at Orbitz.com (2001-2006)
-    * originally a programmer with ClassifiedVentures (1997-2001)
     * author of vim plugins for accurev and rally
     * numbers juggler, 5 & 7 balls
     * snowboarder with instructor certification (CASI / Whistler)

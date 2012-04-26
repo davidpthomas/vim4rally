@@ -56,7 +56,7 @@ let g:rally_vars["descriptions"]["chart_iteration_cumulative_flow"] = "Chart: It
 
 " system info
 let g:rally_vars["plugin_version"] = "1.0"
-let g:rally_vars["plugin_date"] = "2012.01.07"
+let g:rally_vars["plugin_date"] = "2012.04.26"
 let g:rally_vars["plugin_release"] = g:rally_vars["plugin_version"] . " " . g:rally_vars["plugin_date"]
 let g:rally_vars["lib_dir"] = expand("<sfile>:h") . "/lib"   " plugin lib folder; must set in vim since ruby code is dyn loaded
 let g:rally_vars["property_file"] = expand("<sfile>:h") . "/rally.properties"   " plugin property file; must set in vim since ruby code is dyn loaded

@@ -1,10 +1,10 @@
-*rally.txt*         Rally ALM Integration for Vim      Last change: 2012.04.26
+*rally.txt*         Rally ALM Integration for Vim      Last change: 2013.11.25
 
                                                               *rally-overview*
                                                                 *rally-plugin*
                                                                        *rally*
                        Rally ALM Integration for Vim
-                            v1.0 - 2012.04.26
+                            v1.1 - 2013.11.25
 
   Rally is an award winning Agile Lifecycle Management (ALM) tool that helps
   organizations predictably deliver valuable, quality software.  Deliver the
@@ -38,25 +38,31 @@ Contents
 ===============================================================================
 Requirements
                                                            *rally-requirements*
-
-  * Vim 7.2p374 or greater: $ vim --version | head -1
-    - note: the 374 patch provides support for ruby eval() to understand Vim types
-    - note: patches can be found here: http://ftp.vim.org/pub/vim/patches/7.2
-  * Vim/Ruby Module: $vim --version | grep ruby  --> look for "+ruby"
-  * Ruby 1.8.6+: $ ruby --version
-    - note: this plugin was also developed on 1.9.2-p180 but no later.
   * Rally Account: login to http://rally1.rallydev.com
   * Rally Workspace: login & confirm access/name of workspace (upper left corner)
-
+  * Vim 7.4
+    - test: $ vim --version | head -1
+    - note: known minimum version was Vim 7.2p374
+    - note: the 374 patch provides support for ruby eval() to understand Vim types
+    - note: patches can be found here: http://ftp.vim.org/pub/vim/patches/7.2
+  * Vim compiled with Ruby Support
+    - test: $vim --version | grep ruby  --> look for "+ruby"
+    - note: you will likely need to pull down source and compile (see Installation)
+  * Vundle package manager for Vim
+    - https://github.com/gmarik/vundle
+  * Ruby 2.0: $ ruby --version
+    - note: this plugin has worked on Ruby 1.8.6+
+    - note: this plugin was also developed on 1.9.2-p180
+    - note: I use rvm to manage my own installation of ruby versions; instructions below
   * Ruby Gems
-    - rally_rest_api (1.0.3+)
-    - tzinfo (0.3.29)   # may work with earlier versions
-    - builder (3.0.0)   # may work with earlier versions
+    - rally_rest_api (1.1.0)    # originally developed against 1.0.3
+    - tzinfo (1.1.0)            # originally developed against 0.3.29
+    - builder (3.1.4)           # originally developed against 3.0.0
 
     If you don't see those gems with '$ gem list --local', you can
     install them with the following example syntax:
 
-    e.g. $ gem install rally_rest_api --version '= 1.0.3'
+    e.g. $ gem install rally_rest_api --version '= 1.1.0'
 
    * [Optional] +clipboard support compiled in to search on
      visually selected items.
@@ -65,42 +71,42 @@ Requirements
 Installation
                                                            *rally-installation*
 
-  Installing the Rally plugin for Vim is easy.
+  The Rally plugin requires Vim be compiled with support for Ruby.  This may
+  require that you compile your own version of vim.  Sounds scary but,
+  it can be easy!  I've added notes below for my setup in Ubuntu.  YMMV.
 
-  NOTE: Be sure you already have a Rally account for any edition.
+  NOTE: Be sure you already have a Rally account for any edition and can login
+        from a browser.
  
-  0. Requirements - Verify requirements listed at the end of this file.
+  0. Requirements - Verify the list of |rally-requirements|
 
-  1. Download - get the plugin.
+  1. Verify ruby support in Vim.  If you do not have ruby support, see VIM+RUBY NOTES below.
 
-                  * vim.org --> scripts     [stable releases]
-                  * dthomas@rallydev.com,   [development builds]
-                    davidpthomas@gmail.com
+          $ vim --version | grep ruby      # need to see '+ruby'
+          $ vim                            # launch vim
+          :ruby puts RUBY_DESCRIPTION      # should show ruby 2.0.0 etc
 
-  2. Install - unpack archive _directly_ in your vim runtime path.
+  2. Install Plugin with Vundle.  If you don't have vundle, see VIM+VUNDLE NOTES below.
+          
+          *  Add  "Bundle 'davidpthomas/vim4rally'" to your .vimrc vundle section
+          $ vim
+          :BundleInstall
 
-                     Unix: $HOME/.vim
-                  Windows: %HOMEPATH%\vimfiles
+          Note: During installation, vundle will show you a warning/notice to setup
+                your Rally credentials.  Proceed to next step.
 
-               e.g.   $ cd ~/.vim
-                      $ tar -xvzf vim4rally_1.0.tgz   (or unzip)
+  3. Setup - Set file permissions and add your connection/login credentials to
+             the Rally properties file.
 
-               Verify that plugin/rally/rally.vim and doc/rally.txt exist.
-               Other files are needed but those 2 are enough to simply verify.
+           * edit ~/.vim/bundle/vim4rally/plugin/rally.properties and add your values
+           * Set the permissions on properties file to 600 or 'rw-------' to
+             prevent local access.  Vim will warn on startup if permissions are not set.
 
-  3. Setup - Add your login credentials and connect info to the Rally properties file.
+             $ chmod 600 rally.properties
 
-                  plugin/rally/rally.properties
+  4. Documentation - vundle should install the Rally help docs.
 
-           - Set the permissions on properties file to 600 or 'rw-------'
-             NOTE: Vim will warn if permissions are not set.
-
-  4. Documentation - Install help documentation by launching Vim and executing:
-
-                     Unix: :helptags ~/.vim/doc
-                  Windows: :helptags ~\vimfiles\doc
-
-               Verify the setup by typing ':help rally' within Vim.
+             Verify the setup by typing ':help rally' within Vim.
 
   5. Verify  - Open a file.  Type '\h' to see quickhelp commands.
 
@@ -116,6 +122,65 @@ Installation
 
   Happy Vimming!
 
+
+  VIM+RUBY NOTES: Compiling Vim with Ruby Support 
+
+        * Download vim source code
+          $ sudo apt-get install mercurial          # scm tool used by vim
+          $ hg https://vim.googlecode.com/hg/ vim   # get vim source code
+
+        * Get some dev packages needed to compile
+          # notes on compiling vim for ubuntu (add'l packages for GUI vim)
+          # http://vim.wikia.com/wiki/Building_Vim
+          $ sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev \
+              libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
+                libcairo2-dev libx11-dev libxpm-dev libxt-dev
+                  
+        * Install ruby 2.0
+          $ curl -L https://get.rvm.io | bash           # install rvm to manage ruby
+          $ rvm install ruby-2.0.0                      # get ruby 2.0
+          $ rvm --default use 2.0.0                     # set ruby 2 as default for rvm
+                                                        # this sets default ruby binary
+          $ gem install rally_rest_api builder tzinfo   # rally's own ruby gem
+
+        * compile vim
+          $ ./configure --prefix=/usr/local \
+                        --with-features=huge \
+                        --enable-gui=gnome2 \
+                        --enable-rubyinterp \
+                        --with-ruby-command=$HOME/.rvm/bin/ruby     # <=== IMPORTANT!
+          $ make
+          $ sudo make install
+
+        * test vim
+          $ vim --version | grep ruby      # need to see '+ruby'
+          $ vim                            # launch vim
+          :ruby puts RUBY_DESCRIPTION      # should show ruby 2.0.0 etc
+
+  VIM+VUNDLE NOTES: Installing and setting up vundle
+
+    * vundle home:  https://github.com/gmarik/vundle
+
+    * obtain vundle
+      $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+
+    * minimal setup to add to your .vimrc
+
+      " VUNDLE
+      set nocompatible              " be iMproved
+      filetype off                  " required!
+
+      set rtp+=~/.vim/bundle/vundle/
+      call vundle#rc()
+      " let Vundle manage Vundle - required!
+      Bundle 'gmarik/vundle'
+      Bundle 'davidpthomas/vim4rally'
+      filetype plugin indent on  " required!
+
+    * install packages registered in .vimrc
+      $ vim
+      :BundleInstall          # run this command in vim
+ 
 ===============================================================================
 Configuration
                                                            *rally-configuration*
@@ -381,6 +446,9 @@ Plugin Development History
    2012 Feb 09; Santa Cruz, CA: error handling if +clipboard not compiled in for visual searching
    2012 Apr 24; Santa Cruz, CA: created github repo
    2012 Apr 26; Santa Cruz, CA: 1.0 release
+   2013 Nov 23; 37kft; DEN>SJC: researching vundle
+   2013 Nov 24; Santa Cruz, CA: fixed runtime load paths to support vundle
+   2013 Nov 25; Santa Cruz, CA: updated docs; release
 
 
 ===============================================================================
@@ -434,6 +502,8 @@ Backlog
  A User, show cumulative flow diagram for current iteration
 
  <^^^^^^^^^^^^^^[dev cutline]^^^^^^^^^^^>
+ B Plugin: remove /slm suffix from properties file; make internal
+ B User, support for portfolio items
  B [bug] Plugin, only resize active charts
  B User, add/delete tasks
  B User, show and select iteration on burndown chart
@@ -452,7 +522,7 @@ Plugin Author/Maintainer
   David P Thomas, <davidpthomas@gmail.com>
                   <dthomas@rallydev.com>
 
-     personal blog: www.davidpthomas.name
+     personal blog: www.davidpthomas.me
 
     * Vim user since 1997 (pico before that ;)
     * currently a Technical Account Manager at Rally Software (2010-present)

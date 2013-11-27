@@ -3,6 +3,12 @@ vim4rally
 
 Rally ALM Integration for Vim.
 
+This plugin lets you perform the following all within vim:
+* search and view details for Stories, Defects, Tasks
+* update task estimates &amp; todo hours
+* set blocked status
+* view burndown/cumulative flow charts :)
+
 Installation
 ------------
 See <a href="https://github.com/davidpthomas/vim4rally/blob/master/doc/rally.txt">doc/rally.txt</a> for Requirements & Installation details.

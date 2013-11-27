@@ -37,11 +37,9 @@ class Search
         # Ignore error; only for vim that doesn't have +clipboard option compiled in
       end
     end
-
     begin
 
       search_token = search_context
-
       if search_token.empty?
         # TODO: loop and provide user feedback on bad input
         search_token = VIM::evaluate('input("Rally Search: ")')

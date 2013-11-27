@@ -10,6 +10,9 @@
             ID | <%= story.formatted_i_d %>
 <%  end %>
           Name | <%= StringUtils.html2text(story.name) %>
+<%  if story.has_parent?  %>
+        Parent | <%= story.parent_formatted_id %> <%= story.parent_name %>
+<%  end %>
           Tags | <%= story.tags %>
          Owner | <%= story.owner %>
        Project | <%= story.project %>

@@ -15,6 +15,30 @@ class UserStory < RallyObject
     return (est.nil?) ? "N/A" : est
   end
 
+  def has_parent?
+    return (!@ref.portfolio_item.nil? || !@ref.parent.nil?) ? true : false
+  end
+
+  def parent_formatted_id
+    formatted_id = ""
+    if !@ref.parent.nil?
+      formatted_id = @ref.parent.formatted_i_d
+    elsif !@ref.portfolio_item.nil?
+      formatted_id = @ref.portfolio_item.formatted_i_d
+    end
+    return formatted_id
+  end
+
+  def parent_name
+    name = ""
+    if !@ref.parent.nil?
+      name = @ref.parent.name
+    elsif !@ref.portfolio_item.nil?
+      name = @ref.portfolio_item.name
+    end
+    return name
+  end
+
   # Lookup a story by Rally Id.  Id can be just numeric (e.g. 33)
   def self.find_by_id(id)
 

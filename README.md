@@ -3,6 +3,12 @@ vim4rally
 
 Rally ALM Integration for Vim.
 
+Installation
+------------
+See <a href="https://github.com/davidpthomas/vim4rally/blob/master/doc/rally.txt">doc/rally.txt</a> for Requirements & Installation details.
+
+Screenshots
+-----------
 Below are some screenshots that say it all :)
 
 <table>

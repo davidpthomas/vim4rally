@@ -4,8 +4,10 @@ Rally ALM Integration for Vim - Release Notes
 See ':help rally-history' for a detailed log
 See ':help rally-backlog' for possible upcoming features/fixes
 
-Nov 25, 2013 - 1.1
+Nov 27, 2013 - 1.1
                * now requires 'vundle' for installation
+               * now display parent story or first level portfolio item (e.g. Feature)
+                 on user story details page  (note: no support for showing PIs details yet)
 
 Apr 26, 2012 - 1.0
                * minor fixes and error handling

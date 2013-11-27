@@ -73,10 +73,19 @@ set cpo&vim
 
 " Warn users if their password is not protected
 if match(getfperm(g:rally_vars["property_file"]), "rw-------") < 0
+  echo " "
+  echo "Welcome to the Vim plugin for Rally!"
+  echo " "
+  echo "The plugin is installed but you still need to setup rally.properties"
+  echo "[" . g:rally_vars["property_file"] . "]"
+  echo " "
+  echo "  1) Change file permissions of rally.properties"
+  echo "     $ chmod 600 rally.properties"
+  echo "  2) Edit rally.properties to add Rally account details"
+  echo " "
   echo "**[ !! Warning !! ]**********************************************"
   echo "Rally property file contains your Rally password.  Prevent access"
   echo "to other users by setting file permissions to 600 or 'rw-------'."
-  echo "FILE: [" . g:rally_vars["property_file"] . "]"
   echo "*****************************************************************"
 endif
 
@@ -111,28 +120,28 @@ GOTRUBY
   runtime plugin/rally/lib/vim/rally_bindings.vim
 
 catch /RallyPropertiesError/
-  echo "Error loading Rally properties.  Check " . g:rally_vars["property_file"]
+  echo "vim4rally: Error loading Rally properties.  Check " . g:rally_vars["property_file"]
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyUsernameRequired/
-  echo "Rally username required (See rally.vim) - Rally plugin not loaded."
+  echo "vim4rally: Rally username required (See rally.vim) - Rally plugin not loaded."
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyPasswordRequired/
-  echo "Rally password required (See rally.vim) - Rally plugin not loaded."
+  echo "vim4rally: Rally password required (See rally.vim) - Rally plugin not loaded."
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyBaseUrlRequired/
-  echo "Rally base url required (See rally.vim) - Rally plugin not loaded."
+  echo "vim4rally: Rally base url required (See rally.vim) - Rally plugin not loaded."
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyVersionRequired/
-  echo "Rally version required (See rally.vim) - Rally plugin not loaded."
+  echo "vim4rally: Rally version required (See rally.vim) - Rally plugin not loaded."
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyConnectError/
-  echo "Unable to connect to Rally.  Check network connection."
+  echo "vim4rally: Unable to connect to Rally.  Check rally.properties\n[" . g:rally_vars["property_file"] . "]"
   unlet g:rally_vars["loaded_plugin"]
 catch /RallyWorkspaceNotFound/
-  echo "Workspace not found.  Check rally.properties file."
+  echo "vim4rally: Workspace not found.  Check rally.properties file."
   unlet g:rally_vars["loaded_plugin"]
 catch /.*/
-  echo "Error loading plugin. Caught" . v:exception . " in " . v:throwpoint
+  echo "vim4rally: Error loading plugin. Caught" . v:exception . " in " . v:throwpoint
   unlet g:rally_vars["loaded_plugin"]
 endtry
 

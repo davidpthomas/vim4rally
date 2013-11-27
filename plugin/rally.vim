@@ -117,7 +117,7 @@ ruby << GOTRUBY
 GOTRUBY
 
   " vim key mappings and plugin routines; only loaded if connection above successful
-  runtime plugin/rally/lib/vim/rally_bindings.vim
+  runtime plugin/lib/vim/rally_bindings.vim
 
 catch /RallyPropertiesError/
   echo "vim4rally: Error loading Rally properties.  Check " . g:rally_vars["property_file"]
